@@ -1,0 +1,30 @@
+body {
+    background: #000400d4;
+}
+.card-stacked {
+    background-color: #525458;
+    color:#dad6d6;
+}
+.parallax-container {
+    height:400px;
+}
+#fixedNav {
+    position:fixed;
+    background-color: #0000006e;
+}
+#title{
+    font-family: 'Righteous', cursive;
+    color: #ffffffde;
+}
+.navBtns {
+    background-color: rgba(223, 223, 223, 0.486);
+    border-radius:5px;
+}
+.articleCard {
+    box-sizing: border-box;
+    height:300px;
+}
+.card-image img{
+    height: 100%;
+    width:auto;
+}
