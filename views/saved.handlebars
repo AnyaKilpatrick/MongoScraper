@@ -1,10 +1,52 @@
-<nav>
-    <div class="nav-wrapper">
-        <a href="#" class="brand-logo">Home</a>
-        <ul id="nav-mobile" class="right hide-on-med-and-down">
-        <li><a href="sass.html">Sass</a></li>
-        <li><a href="badges.html">Components</a></li>
-        <li><a href="collapsible.html">JavaScript</a></li>
-        </ul>
+{{!-- header --}}
+<div class="parallax-container">
+    <div class="parallax">
+        <img src="assets/images/parallax1.jpg">
     </div>
-</nav>
+    <div class="row">
+        <div class="col s12 center-align">
+            <h1 id="title">MongoScraper</h1>
+        </div>
+        <div class="col s12 center-align">
+            <a id="scrape" class="waves-effect waves-light btn-large navBtns">Latest News</a>
+            <a class="waves-effect waves-light btn-large navBtns">My Articles</a>
+        </div>
+    </div>
+</div>
+{{!-- main content (cards) --}}
+<div class="row">
+  {{#each articles}}
+  <div class="col s6">
+    <div class="card horizontal z-depth-5 articleCard">
+      <div class="card-image">
+        <img class="responsive-img cardsImg" src="{{imgLink}}">
+      </div>
+      <div class="card-stacked">
+        <div class="card-content">
+          <h5>{{title}}</h5>
+          <p>{{summary}}</p>
+        </div>
+        <div class="card-action row">
+          <a class="col s5" href="{{articleLink}}" target="_blank">Read Article</a><a href="#" data-id="{{_id}}" class="col s5 activator">Add Notes</a>
+          <a data-id="{{_id}}" class="waves-effect waves-light btn-large navBtns right deleteArticle">Delete</a>
+        </div>
+      </div>
+      <div class="card-reveal">
+        <span class="card-title grey-text text-darken-4"><i class="material-icons right">X</i>Card Title</span>
+         <div class="row">
+            <form class="col s12">
+                <div class="row">
+                    <div id="noteHolder{{_id}}" class="col s12">
+                        {{!-- <p>No saved notes yet <a href="#" data-id="{{_id}}" class="waves-effect waves-light btn right navBtns">Delete</a></p> --}}
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="noteFor{{_id}}" class="note" type="text"><a href="#" data-id="{{_id}}" class="waves-effect waves-light btn-large addNote">Add</a>
+                        <label for="note">Note</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{/each}}

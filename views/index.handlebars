@@ -6,10 +6,11 @@
     <div class="row">
         <div class="col s12 center-align">
             <h1 id="title">MongoScraper</h1>
+            <h4 id="title">travel</h4>
         </div>
         <div class="col s12 center-align">
             <a id="scrape" class="waves-effect waves-light btn-large navBtns">Latest News</a>
-            <a class="waves-effect waves-light btn-large navBtns">My Articles</a>
+            <a id="openSavedArticles" class="waves-effect waves-light btn-large navBtns" href="/myarticles">My Articles</a>
         </div>
     </div>
 </div>
@@ -27,7 +28,8 @@
           <p>{{summary}}</p>
         </div>
         <div class="card-action">
-          <a href="{{articleLink}}">This is a link</a>
+          <a href="{{articleLink}}" target="_blank">Read Article</a>
+          <button data-id="{{_id}}" class="waves-effect waves-light btn-large navBtns right saveArticle">Save</button>
         </div>
       </div>
     </div>
