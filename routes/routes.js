@@ -6,7 +6,7 @@ var cheerio=require("cheerio");
 
 
 module.exports = function(app){
-    // home page
+    // ============home page============
     app.get("/", function(req, res){
         // grabbing data from Articles collection
         db.Article.find({}).then(function(dbArticle){
@@ -28,7 +28,7 @@ module.exports = function(app){
         })
         console.log("Home page launched");
     })
-    // scrape news
+    //============route for scraping news=======
     app.get("/scrape", function(req, res){
         // grabbing body of html request
         axios.get("http://www.bbc.com/travel/").then(function(response){
@@ -41,24 +41,29 @@ module.exports = function(app){
                 // grabbing img, title, summary and link of each div(article)
                 result.title = $(element)
                     .find("h3.promo-unit-title")
-                    .text();
+                    .text().trim();
                 result.articleLink = $(element)
                     .find("h3.promo-unit-title")
                     .parent("a")
                     .attr("href");
                 result.summary = $(element)
                     .find("p.promo-unit-summary")
-                    .text();
+                    .text().trim();
                 result.imgLink = $(element)
                     .find("a")
                     .attr("href")
                     .replace("130_73", "976_549"); //replacing it in an img src, so we can load a higher quality picture
                 console.log(result);
                 // Create a new Article using the `result` object built from scraping
-                db.Article.create(result)
+                db.Article.update( //using upsert option to insert new data only if it doesn't already exist in db
+                    {title:result.title}, //looking for matching article title and summary (because sometimes BBC changes title)
+                    result,
+                    {upsert:true}
+                )
                 .then(function(dbArticle) {
                     // View the added result in the console
                     console.log(dbArticle);
+                    res.redirect("/");
                 })
                 .catch(function(err) {
                     // If an error occurred, send it to the client
@@ -67,4 +72,75 @@ module.exports = function(app){
             })
         })
     })
+    // ======saving(updating) articles==============
+    app.post("/saveArticle/:id", function(req, res){
+        var articleId=req.params.id;
+        db.Article.findOneAndUpdate({_id:articleId}, {saved: true}).then(function(savedArticle){
+            console.log(savedArticle);
+        })
+    })
+    //=========saved articles page==========
+    app.get("/myarticles", function(req, res){
+        // pulling all articles that have propert "saved" set to true
+
+        db.Article.find({saved:true}).then(function(dbArticle){
+            console.log("dbArticle!!!!!!!!" + dbArticle.length);
+            if(dbArticle.length>0){
+                console.log("found "+dbArticle.length+"results");
+                // creating an object to pass it to index handlebar
+                var hbsObject = {
+                    articles: dbArticle
+                };
+                res.render("saved", hbsObject);
+            }else{
+                res.render("saved");
+                console.log("You have 0 saved articles");
+            }
+        })
+        .catch(function(err){
+        // in case of error
+        res.json(err);
+        })
+    })
+    app.get("/myarticles/:articleId", function(req, res){
+        var articleId = req.params.articleId;
+        // populating the Article with note
+        db.Article.findOne({_id:articleId})
+        .populate("note")
+        .then(function(dbArticle){
+            res.json(dbArticle);
+        }).catch(function(err){
+            res.json(err);
+        })
+    })
+    // =========save new note============
+    app.post("/addnote/:articleid", function(req, res){
+        var articleId = req.params.articleid;
+
+        db.Note.create(req.body).then(function(dbNote){
+
+            // before we update note in article,  we are deleting old note from db as we don't need it anymore
+            // db.Article.findOne({_id:articleId}).then(function(result){
+            //     db.Note.remove({_id:result.note._id});
+            // }).then(function(results){
+            //     console.log("successfully removed old note");
+            // }).catch(function(err){
+            //     console.log(err);
+            // })
+
+            // when note is saved successfully, we need to find an article
+            //and associate it with note by adding note id
+            //{new:true} will return an updated Article, as mongoose query returns original one (before changes) by default
+            return db.Article.findOneAndUpdate({_id:articleId}, {note: dbNote._id}, {new:true});
+
+        }).then(function(data){
+            return db.Article.findOne({_id:articleId}, {new: true}).populate("note");
+        }).then(function(dbArticle){
+            res.json(dbArticle);
+        }).catch(function(err){
+            res.json(err);
+        })
+    })
+
+
 }
