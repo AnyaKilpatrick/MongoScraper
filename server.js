@@ -36,7 +36,17 @@ app.set("view engine", "handlebars");
 require("./routes/routes.js")(app);
 
 // connecting to the MongoDB
-mongoose.connect("mongodb://localhost/travelNewsScraper");
+// mongoose.connect("mongodb://localhost/travelNewsScraper");
+// If deployed, use the deployed database. Otherwise use the local mongoHeadlines database
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/travelNewsScraper";
+
+// Set mongoose to leverage built in JavaScript ES6 Promises
+// Connect to the Mongo DB
+mongoose.Promise = Promise;
+mongoose.connect(MONGODB_URI);
+
+
+
 // srating the server
 app.listen(PORT, function(){
     console.log("App listening on PORT "+ PORT);
