@@ -22,9 +22,35 @@ body {
 }
 .articleCard {
     box-sizing: border-box;
-    height:300px;
+    /* height:300px; */
 }
 .card-image img{
-    height: 100%;
-    width:auto;
+    height: auto;
+    width:100%;
 }
+#goHomeBtn {
+    margin-top:20px;
+}
+.saveArticle{
+    color: #ffffff;
+}
+.card-image {
+    background: #525458;
+}
+
+/* Media queries */
+@media screen and (max-width: 600px) {
+    h1{
+        font-size:38px;
+    }
+    .navBtns {
+        margin-top: 5px;
+    }
+    
+ }
+
+ @media screen and (max-width: 400px) {
+     .card-action {
+         font-size:12px;
+     }
+ }

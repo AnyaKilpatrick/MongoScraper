@@ -9,7 +9,9 @@
             <h4 id="title">travel</h4>
         </div>
         <div class="col s12 center-align">
+            {{!-- scrapes news and reloads page --}}
             <a id="scrape" class="waves-effect waves-light btn-large navBtns">Latest News</a>
+            {{!-- takes you to the page with saved articles --}}
             <a id="openSavedArticles" class="waves-effect waves-light btn-large navBtns" href="/myarticles">My Articles</a>
         </div>
     </div>
@@ -17,9 +19,9 @@
 {{!-- main content (cards) --}}
 <div class="row">
   {{#each articles}}
-  <div class="col s6">
+  <div class="col m12 offset-l1 l10">
     <div class="card horizontal z-depth-5 articleCard">
-      <div class="card-image">
+      <div class="card-image hide-on-small-only">
         <img class="responsive-img cardsImg" src="{{imgLink}}">
       </div>
       <div class="card-stacked">
@@ -28,30 +30,15 @@
           <p>{{summary}}</p>
         </div>
         <div class="card-action">
+          {{!-- link to article --}}
           <a href="{{articleLink}}" target="_blank">Read Article</a>
-          <button data-id="{{_id}}" class="waves-effect waves-light btn-large navBtns right saveArticle">Save</button>
+          {{!-- saves article to "my articles" --}}
+          <button data-id="{{_id}}" class="waves-effect waves-light btn-flat right saveArticle">Save</button>
         </div>
       </div>
     </div>
   </div>
   {{/each}}
-
-  {{!-- <div class="col s6">
-    <div class="card horizontal z-depth-5">
-      <div class="card-image">
-        <img class="responsive-img" src="assets/images/parallax1.jpg">
-      </div>
-      <div class="card-stacked">
-        <div class="card-content">
-          <p>I am a very simple card. I am good at containing small bits of information.</p>
-        </div>
-        <div class="card-action">
-          <a href="#">This is a link</a>
-        </div>
-      </div>
-    </div>
-  </div> --}}
-
 </div>
 
 
