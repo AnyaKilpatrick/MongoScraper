@@ -74,9 +74,19 @@ module.exports = function(app){
     })
     // ======saving(updating) articles==============
     app.post("/saveArticle/:id", function(req, res){
-        var articleId=req.params.id;
-        db.Article.findOneAndUpdate({_id:articleId}, {saved: true}).then(function(savedArticle){
+        var articleId = req.params.id;
+        db.Article.findOneAndUpdate({_id:articleId}, {saved: true})
+        .then(function(savedArticle){
             console.log(savedArticle);
+        })
+    })
+    //==========deleting(updating) articles=======
+    app.post("/delete/:articleId", function(req, res){
+        var articleId = req.params.articleId;
+        db.Article.findOneAndUpdate({_id:articleId}, {saved: false})
+        .then(function(updatedArticle){
+            console.log("successfully updated");
+            res.json(updatedArticle);
         })
     })
     //=========saved articles page==========
@@ -141,6 +151,14 @@ module.exports = function(app){
             res.json(err);
         })
     })
-
+    //=============delete note==============
+    app.post("/deleteNote/:noteId", function(req, res){
+        var noteId = req.params.noteId;
+        //deleting note document
+        db.Note.findOneAndRemove({_id:noteId}).then(function(data){
+            res.json(data);
+            console.log("note was deleted successfully");
+        })
+    })
 
 }
