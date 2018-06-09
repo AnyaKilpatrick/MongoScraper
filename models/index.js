@@ -1,6 +1,6 @@
 // expoting the object that contains app's models
 
 module.exports={
-    Article:require("./Article"),
-    Note: require("./Note")
+    Article:require("./article"),
+    Note: require("./note")
 }

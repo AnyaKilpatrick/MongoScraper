@@ -3,7 +3,7 @@ var mongoose = require("mongoose");
 // saving a reference to the schema constructor
 var Schema = mongoose.Schema;
 
-// creating a new ArticleSchema object
+// create a new ArticleSchema object
  var ArticleSchema = new Schema({
     // title
     title:{
